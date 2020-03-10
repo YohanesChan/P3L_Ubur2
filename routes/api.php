@@ -16,3 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::GET('pegawai','PegawaiController@index');
+Route::POST('pegawai/create','PegawaiController@tambah_pegawai');
+Route::GET('pegawai/search/{nama_pegawai}','PegawaiController@cari_pegawai');
+Route::POST('pegawai/update/{id_pegawai}','PegawaiController@edit_pegawai');
+Route::POST('pegawai/delete/{id}','PegawaiController@hapus_pegawai');
+
+Route::GET('supplier','SupplierController@index');
+Route::POST('supplier/create','SupplierController@tambah_supplier');
+Route::GET('supplier/search/{nama_supplier}','SupplierController@cari_supplier');
+Route::POST('supplier/update/{id_supplier}','SupplierController@edit_supplier');
+Route::POST('supplier/delete/{id}','SupplierController@hapus_supplier');
