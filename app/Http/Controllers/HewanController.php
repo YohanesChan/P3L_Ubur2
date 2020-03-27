@@ -1,43 +1,45 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Supplier;
+use App\Hewan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class HewanController extends Controller
 {
     public function index()
     {
-        $supplier= Supplier::where('deleted_at',null)->get();
+        $hewan= Hewan::where('deleted_at',null)->get();
         $response = [
             'status' => 'GET Berhasil',
-            'result' => $supplier, 
+            'result' => $hewan,
         ];
 
         return response()->json($response,200);
     }
 
-    public function tambah_supplier(Request $request)
+    public function tambah_hewan(Request $request)
     {
-        $supplier = new Supplier;
-        $supplier->nama_supplier = $request['nama_supplier'];
-        $supplier->alamat_supplier = $request['alamat_supplier'];
-        $supplier->telp_supplier = $request['telp_supplier'];
-        $supplier->created_at = Carbon::now();
-        $supplier->updated_at = Carbon::now();
+        $hewan = new hewan;
+        $hewan->nama_hewan = $request['nama_hewan'];
+        $hewan->birthday_hewan = $request['birthday_hewan'];
+        $hewan->id_pegawai_fk = 1;
+        $hewan->id_customer_fk = 1;
+        $hewan->id_jenis_fk = 1;
+        $hewan->created_at = Carbon::now();
+        $hewan->updated_at = Carbon::now();
         try{
-            $success = $supplier->save();
+            $success = $hewan->save();
             $status = 200;
             $response = [
                 'status' => 'Input Berhasil',
-                'result' => $supplier
+                'result' => $hewan
             ];
             
         }catch(\Illuminate\Database\QueryException $e){
             $status = 500;
             $response = [
-                'status' => 'Input Gagal',
+                'status' => 'Error',
                 'result' => [],
                 'message' => $e
             ];
@@ -45,10 +47,10 @@ class SupplierController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function cari_supplier($search)
+    public function cari_hewan($search)
     {
-        $supplier = Supplier::where('nama_supplier','like','%'.$search.'%')->get();
-        if(sizeof($supplier)==0)
+        $hewan = Hewan::where('nama_hewan','like','%'.$search.'%')->get();
+        if(sizeof($hewan)==0)
         {
             $status=404;
             $response = [
@@ -60,17 +62,17 @@ class SupplierController extends Controller
             $status=200;
             $response = [
                 'status' => 'Cari Berhasil',
-                'data' => $supplier
+                'data' => $hewan
             ];
         }
         return response()->json($response,$status); 
     }
 
-    public function edit_supplier(Request $request, $search)
+    public function edit_hewan(Request $request, $search)
     {
-        $supplier = Supplier::find($search);
+        $hewan = Hewan::find($search);
 
-        if($supplier==NULL){
+        if($hewan==NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -78,17 +80,19 @@ class SupplierController extends Controller
             ];
         }
         else{
-            $supplier->nama_supplier = $request['nama_supplier'];
-            $supplier->alamat_supplier = $request['alamat_supplier'];
-            $supplier->telp_supplier = $request['telp_supplier'];
-            $supplier->updated_at = Carbon::now();
+            $hewan->nama_hewan = $request['nama_hewan'];
+            $hewan->birthday_hewan = $request['birthday_hewan'];
+            $hewan->id_pegawai_fk = 1;///////////////////////////////////////dapetin id fk pie broo
+            $hewan->id_customer_fk = 1;///////////////////////////////////////dapetin id fk pie broo
+            $hewan->id_jenis_fk = 1;///////////////////////////////////////dapetin id fk pie broo
+            $hewan->updated_at = Carbon::now();
 
             try{
-                $success = $supplier->save();
+                $success = $hewan->save();
                 $status = 200;
                 $response = [
                     'status' => 'Update Berhasil',
-                    'data' => $supplier
+                    'data' => $hewan
                 ];  
             }
             catch(\Illuminate\Database\QueryException $e){
@@ -103,11 +107,11 @@ class SupplierController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_supplier($id_supplier)
+    public function hapus_hewan($id_hewan)
     {
-        $supplier = Supplier::find($id_supplier);
+        $hewan = hewan::find($id_hewan);
 
-        if($supplier==NULL || $supplier->deleted_at != NULL){
+        if($hewan==NULL || $hewan->deleted_at != NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -116,14 +120,14 @@ class SupplierController extends Controller
         }
         else
         {
-            $supplier->created_at = NULL;
-            $supplier->updated_at = NULL;
-            $supplier->deleted_at = Carbon::now();
-            $supplier->save();
+            $hewan->created_at = NULL;
+            $hewan->updated_at = NULL;
+            $hewan->deleted_at = Carbon::now();
+            $hewan->save();
             $status=200;
             $response = [
-                'status' => 'Delete Berhasil',
-                'data' => $supplier
+                'status' => 'Hapus Berhasil',
+                'data' => $hewan
             ];   
         }
         return response()->json($response,$status); 

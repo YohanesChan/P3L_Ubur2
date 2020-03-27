@@ -13,11 +13,18 @@ class CreateDetailPengadaan extends Migration
      */
     public function up()
     {
-        Schema::create('Detail_Pengadaans', function (Blueprint $table) {
+        Schema::create('Detil_Pengadaans', function (Blueprint $table) {
             $table->bigIncrements('id_detil_pengadaan');
+            
+            $table->string('nama_produk')->nullable();
             $table->integer('jml_produk')->nullable();
-            $table->float('totalHarga_pengadaan')->nullable();
-           
+            $table->integer('harga_produk')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->dateTime('created_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
+            $table->dateTime('deleted_at')->nullable();
 
             $table->bigInteger('id_pengadaan_fk')->unsigned();
             $table->foreign('id_pengadaan_fk')->references('id_pengadaan')->on('Pengadaans');

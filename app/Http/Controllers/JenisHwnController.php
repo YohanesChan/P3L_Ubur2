@@ -1,37 +1,36 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Supplier;
+use App\JenisHewan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class JenisHwnController extends Controller
 {
     public function index()
     {
-        $supplier= Supplier::where('deleted_at',null)->get();
+        $jenisHwn = JenisHewan::where('deleted_at',null)->get();
         $response = [
             'status' => 'GET Berhasil',
-            'result' => $supplier, 
+            'result' => $jenisHwn,
         ];
 
         return response()->json($response,200);
     }
 
-    public function tambah_supplier(Request $request)
+    public function tambah_jenisHwn(Request $request)
     {
-        $supplier = new Supplier;
-        $supplier->nama_supplier = $request['nama_supplier'];
-        $supplier->alamat_supplier = $request['alamat_supplier'];
-        $supplier->telp_supplier = $request['telp_supplier'];
-        $supplier->created_at = Carbon::now();
-        $supplier->updated_at = Carbon::now();
+        $jenisHwn = new JenisHewan();
+        $jenisHwn->nama_jenis_hewan = $request['nama_jenis_hewan'];
+        $jenisHwn->id_pegawai_fk = 1;
+        $jenisHwn->created_at = Carbon::now();
+        $jenisHwn->updated_at = Carbon::now();
         try{
-            $success = $supplier->save();
+            $success = $jenisHwn->save();
             $status = 200;
             $response = [
                 'status' => 'Input Berhasil',
-                'result' => $supplier
+                'result' => $jenisHwn
             ];
             
         }catch(\Illuminate\Database\QueryException $e){
@@ -45,10 +44,10 @@ class SupplierController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function cari_supplier($search)
+    public function cari_jenisHwn($search)
     {
-        $supplier = Supplier::where('nama_supplier','like','%'.$search.'%')->get();
-        if(sizeof($supplier)==0)
+        $jenisHwn = JenisHewan::where('nama_jenis_hewan','like','%'.$search.'%')->get();
+        if(sizeof($jenisHwn)==0)
         {
             $status=404;
             $response = [
@@ -60,17 +59,17 @@ class SupplierController extends Controller
             $status=200;
             $response = [
                 'status' => 'Cari Berhasil',
-                'data' => $supplier
+                'data' => $jenisHwn
             ];
         }
         return response()->json($response,$status); 
     }
 
-    public function edit_supplier(Request $request, $search)
+    public function edit_jenisHwn(Request $request, $search)
     {
-        $supplier = Supplier::find($search);
+        $jenisHwn = JenisHewan::find($search);
 
-        if($supplier==NULL){
+        if($jenisHwn==NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -78,17 +77,16 @@ class SupplierController extends Controller
             ];
         }
         else{
-            $supplier->nama_supplier = $request['nama_supplier'];
-            $supplier->alamat_supplier = $request['alamat_supplier'];
-            $supplier->telp_supplier = $request['telp_supplier'];
-            $supplier->updated_at = Carbon::now();
+            $jenisHwn->nama_jenis_hewan = $request['nama_jenis_hewan'];
+            $jenisHwn->id_pegawai_fk = 1;
+            $jenisHwn->updated_at = Carbon::now();
 
             try{
-                $success = $supplier->save();
+                $success = $jenisHwn->save();
                 $status = 200;
                 $response = [
                     'status' => 'Update Berhasil',
-                    'data' => $supplier
+                    'data' => $jenisHwn
                 ];  
             }
             catch(\Illuminate\Database\QueryException $e){
@@ -103,11 +101,11 @@ class SupplierController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_supplier($id_supplier)
+    public function hapus_jenisHwn($id_jenis)
     {
-        $supplier = Supplier::find($id_supplier);
+        $jenisHwn = JenisHewan::find($id_jenis);
 
-        if($supplier==NULL || $supplier->deleted_at != NULL){
+        if($jenisHwn==NULL || $jenisHwn->deleted_at != NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -116,14 +114,14 @@ class SupplierController extends Controller
         }
         else
         {
-            $supplier->created_at = NULL;
-            $supplier->updated_at = NULL;
-            $supplier->deleted_at = Carbon::now();
-            $supplier->save();
+            $jenisHwn->created_at = NULL;
+            $jenisHwn->updated_at = NULL;
+            $jenisHwn->deleted_at = Carbon::now();
+            $jenisHwn->save();
             $status=200;
             $response = [
                 'status' => 'Delete Berhasil',
-                'data' => $supplier
+                'data' => $jenisHwn
             ];   
         }
         return response()->json($response,$status); 

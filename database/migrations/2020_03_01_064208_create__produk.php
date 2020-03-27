@@ -17,7 +17,7 @@ class CreateProduk extends Migration
             $table->bigIncrements('id_produk');
             $table->string('nama_produk')->nullable();
             $table->integer('harga_produk')->nullable();
-            $table->string('image_produk')->nullable();
+            $table->binary('gambar')->nullable();
             $table->integer('stok_produk')->nullable();
             $table->integer('stok_minimal')->nullable();
             $table->string('created_by')->nullable();

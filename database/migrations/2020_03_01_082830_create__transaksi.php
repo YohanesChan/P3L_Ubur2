@@ -20,18 +20,13 @@ class CreateTransaksi extends Migration
             $table->float('diskon_transaksi')->nullable();
             $table->float('total_transaksi')->nullable();
             $table->string('status_transaksi')->nullable();
-            $table->string('status_layanan')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
 
-            $table->unsignedBigInteger('id_cs_fk');
-            $table->foreign('id_cs_fk')->references('id_pegawai')->on('Pegawais');
-            $table->unsignedBigInteger('id_kasir_fk');
-            $table->foreign('id_kasir_fk')->references('id_pegawai')->on('Pegawais');
-            $table->unsignedBigInteger('id_hewan_fk');
-            $table->foreign('id_hewan_fk')->references('id_hewan')->on('Hewans');
+            $table->unsignedBigInteger('id_pegawai_fk');
+            $table->foreign('id_pegawai_fk')->references('id_pegawai')->on('Pegawais');
             $table->unsignedBigInteger('id_customer_fk');
             $table->foreign('id_customer_fk')->references('id_customer')->on('Customers');
         });
