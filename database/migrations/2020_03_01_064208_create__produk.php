@@ -15,6 +15,7 @@ class CreateProduk extends Migration
     {
         Schema::create('Produks', function (Blueprint $table) {
             $table->bigIncrements('id_produk');
+            $table->string('no_produk');
             $table->string('nama_produk')->nullable();
             $table->integer('harga_produk')->nullable();
             $table->binary('gambar')->nullable();

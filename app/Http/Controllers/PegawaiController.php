@@ -16,7 +16,7 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        $pegawai = Pegawai::where('deleted_at',null)->get();
+        $pegawai = Pegawai::where('deleted_at', '=', null)->get();
         $response = [
             'status' => 'GET Berhasil',
             'result' => $pegawai,
@@ -36,6 +36,8 @@ class PegawaiController extends Controller
         $pegawai->telp_pegawai = $request['telp_pegawai'];
         $pegawai->username_pegawai = $request['username_pegawai'];
         $pegawai->password_pegawai = Hash::make($request->password_pegawai);
+        $pegawai->created_by = $request['created_by'];
+        $pegawai->updated_by = $request['updated_by'];
         $pegawai->created_at = Carbon::now();
         $pegawai->updated_at = Carbon::now();
         try{
@@ -94,6 +96,8 @@ class PegawaiController extends Controller
             $pegawai->alamat_pegawai = $request['alamat_pegawai'];
             $pegawai->birthday_pegawai = $request['birthday_pegawai'];
             $pegawai->telp_pegawai = $request['telp_pegawai'];
+            $pegawai->created_by = $request['created_by'];
+            $pegawai->updated_by = $request['updated_by'];
             $pegawai->updated_at = Carbon::now();
 
             try{
@@ -116,7 +120,7 @@ class PegawaiController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_pegawai($id_pegawai)
+    public function hapus_pegawai($id_pegawai, Request $request)
     {
         $pegawai = Pegawai::find($id_pegawai);
 
@@ -129,6 +133,9 @@ class PegawaiController extends Controller
         }
         else
         {
+            $pegawai->created_by = $request['created_by'];
+            $pegawai->updated_by = $request['updated_by'];
+            $pegawai->deleted_by = $request['deleted_by'];
             $pegawai->created_at = NULL;
             $pegawai->updated_at = NULL;
             $pegawai->deleted_at = Carbon::now();
@@ -152,10 +159,11 @@ class PegawaiController extends Controller
                 'result' => []
             ];
         }else{
+            
             if(Hash::check($request->password_pegawai,$pegawai->password_pegawai)){
                 $status=200;
                 $response = [
-                    'status' => 'Login Berhasil',
+                    'status' => 'GET Berhasil',
                     'result' => $pegawai
                 ];
             }else{
@@ -175,7 +183,30 @@ class PegawaiController extends Controller
         $pegawai = Pegawai::where('role_pegawai',$role_pegawai)
         ->orderBy('created_at', 'desc')->first();
         
-        if($role_pegawai==2)
+        if($role_pegawai=="Owner")
+        {
+            if(isset($pegawai))
+            {
+                $no = substr($pegawai->no_pegawai,2);
+
+                if($no<9)
+                {
+                    return 'OW'.'00'.($no+1);
+                } 
+                else if($no<99)
+                {
+                    return 'OW'.'0'.($no+1);
+                }
+                else
+                {
+                    return 'OW'.($no+1);
+                }
+            }
+            else
+            {
+                return 'OW001';
+            }
+        }else if($role_pegawai=="Customer Service")
         {
             if(isset($pegawai))
             {
@@ -221,83 +252,5 @@ class PegawaiController extends Controller
                 return 'K001';
             }
         }
-    }
-
-    function upload(){
-        $namaFile = $_FILES['gambar']['name'];
-        $ukuranFile = $_FILES['gambar']['size'];
-        $error = $_FILES['gambar']['error'];
-        $tmpName = $_FILES['gambar']['tmp_name'];
-
-         //mengecek file gambar atau bukan
-        $ekstensiGambarValid = ['jpg','jpeg','png','gif'];
-        $ekstensiGambar = explode('.',$namaFile);
-        $ekstensiGambar = strtolower(end($ekstensiGambar));
-        if(!in_array($ekstensiGambar, $ekstensiGambarValid)){
-            return 1;
-        }
-        
-        $gambar=$this->scaleImageFileToBlob($tmpName);
-    
-        return $gambar;
-    }
-
-    function scaleImageFileToBlob($file) {
-
-        $source_pic = $file;
-        $max_width = 200;
-        $max_height = 200;
-    
-        list($width, $height, $image_type) = getimagesize($file);
-    
-        switch ($image_type)
-        {
-            case 1: $src = imagecreatefromgif($file); break;
-            case 2: $src = imagecreatefromjpeg($file);  break;
-            case 3: $src = imagecreatefrompng($file); break;
-            default: return '';  break;
-        }
-    
-        $x_ratio = $max_width / $width;
-        $y_ratio = $max_height / $height;
-    
-        if( ($width <= $max_width) && ($height <= $max_height) ){
-            $tn_width = $width;
-            $tn_height = $height;
-            }elseif (($x_ratio * $height) < $max_height){
-                $tn_height = ceil($x_ratio * $height);
-                $tn_width = $max_width;
-            }else{
-                $tn_width = ceil($y_ratio * $width);
-                $tn_height = $max_height;
-        }
-    
-        $tmp = imagecreatetruecolor($tn_width,$tn_height);
-    
-        /* Check if this image is PNG or GIF, then set if Transparent*/
-        if(($image_type == 1) OR ($image_type==3))
-        {
-            imagealphablending($tmp, false);
-            imagesavealpha($tmp,true);
-            $transparent = imagecolorallocatealpha($tmp, 255, 255, 255, 127);
-            imagefilledrectangle($tmp, 0, 0, $tn_width, $tn_height, $transparent);
-        }
-        imagecopyresampled($tmp,$src,0,0,0,0,$tn_width, $tn_height,$width,$height);
-    
-        ob_start();
-    
-        switch ($image_type)
-        {
-            case 1: imagegif($tmp); break;
-            case 2: imagejpeg($tmp, NULL, 100);  break; // best quality
-            case 3: imagepng($tmp, NULL, 0); break; // no compression
-            default: echo ''; break;
-        }
-    
-        $final_image = ob_get_contents();
-    
-        ob_end_clean();
-    
-        return $final_image;
     }
 }

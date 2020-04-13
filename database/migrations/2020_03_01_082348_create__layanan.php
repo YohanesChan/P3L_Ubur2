@@ -15,9 +15,9 @@ class CreateLayanan extends Migration
     {
         Schema::create('Layanans', function (Blueprint $table) {
             $table->bigIncrements('id_layanan');
+            $table->string('no_layanan');
             $table->string('nama_layanan')->nullable();
             $table->integer('harga_layanan')->nullable();
-            $table->string('image_layanan')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

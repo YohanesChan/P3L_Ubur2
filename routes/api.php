@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::POST('login','PegawaiController@login');
+Route::POST('pegawai/login','PegawaiController@login');
 
 Route::GET('pegawai','PegawaiController@index');
 Route::POST('pegawai/create','PegawaiController@tambah_pegawai');

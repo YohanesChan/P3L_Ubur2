@@ -22,10 +22,13 @@ class LayananController extends Controller
     public function tambah_layanan(Request $request)
     {
         $layanan = new Layanan();
+        $layanan->no_layanan = $this->generateID();
         $layanan->nama_layanan = $request['nama_layanan'];
         $layanan->harga_layanan = $request['harga_layanan'];
-        $layanan->id_pegawai_fk = 1;
+        $layanan->id_pegawai_fk = $request['id_pegawai_fk'];
         $layanan->id_ukuran_fk = $request['id_ukuran_fk'];
+        $layanan->created_by = $request['created_by'];
+        $layanan->updated_by = $request['updated_by'];
         $layanan->created_at = Carbon::now();
         $layanan->updated_at = Carbon::now();
         try{
@@ -81,8 +84,8 @@ class LayananController extends Controller
         }
         else{
             $layanan->harga_layanan = $request['harga_layanan'];
-            $layanan->id_pegawai_fk = 1;
-            $layanan->id_ukuran_fk = 1;
+            $layanan->created_by = $request['created_by'];
+            $layanan->updated_by = $request['updated_by'];
             $layanan->updated_at = Carbon::now();
 
             try{
@@ -105,7 +108,7 @@ class LayananController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_layanan($id_layanan)
+    public function hapus_layanan($id_layanan, Request $request)
     {
         $layanan = layanan::find($id_layanan);
 
@@ -120,6 +123,9 @@ class LayananController extends Controller
         {
             $layanan->created_at = NULL;
             $layanan->updated_at = NULL;
+            $layanan->created_by = $request['created_by'];
+            $layanan->updated_by = $request['updated_by'];
+            $layanan->deleted_by = $request['deleted_by'];
             $layanan->deleted_at = Carbon::now();
             $layanan->save();
             $status=200;
@@ -129,5 +135,31 @@ class LayananController extends Controller
             ];   
         }
         return response()->json($response,$status); 
+    }
+    public function generateID()
+    {
+        $layanan = Layanan::orderBy('created_at', 'desc')->first();
+        
+        if(isset($layanan))
+            {
+                $no = substr($layanan->no_layanan,2);
+
+                if($no<9)
+                {
+                    return 'LY'.'00'.($no+1);
+                } 
+                else if($no<99)
+                {
+                    return 'LY'.'0'.($no+1);
+                }
+                else
+                {
+                    return 'LY'.($no+1);
+                }
+            }
+            else
+            {
+                return 'LY001';
+            }
     }
 }

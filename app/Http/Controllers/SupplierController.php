@@ -21,9 +21,14 @@ class SupplierController extends Controller
     public function tambah_supplier(Request $request)
     {
         $supplier = new Supplier;
+        $supplier->no_supplier = $this->generateID();
         $supplier->nama_supplier = $request['nama_supplier'];
         $supplier->alamat_supplier = $request['alamat_supplier'];
+        $supplier->id_pegawai_fk = $request['id_pegawai_fk'];
         $supplier->telp_supplier = $request['telp_supplier'];
+        $supplier->created_by = $request['created_by'];
+        $supplier->updated_by = $request['updated_by'];
+
         $supplier->created_at = Carbon::now();
         $supplier->updated_at = Carbon::now();
         try{
@@ -81,6 +86,8 @@ class SupplierController extends Controller
             $supplier->nama_supplier = $request['nama_supplier'];
             $supplier->alamat_supplier = $request['alamat_supplier'];
             $supplier->telp_supplier = $request['telp_supplier'];
+            $supplier->created_by = $request['created_by'];
+            $supplier->updated_by = $request['updated_by'];
             $supplier->updated_at = Carbon::now();
 
             try{
@@ -103,7 +110,7 @@ class SupplierController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_supplier($id_supplier)
+    public function hapus_supplier($id_supplier, Request $request)
     {
         $supplier = Supplier::find($id_supplier);
 
@@ -116,6 +123,9 @@ class SupplierController extends Controller
         }
         else
         {
+            $supplier->created_by = $request['created_by'];
+            $supplier->updated_by = $request['updated_by'];
+            $supplier->deleted_by = $request['deleted_by'];
             $supplier->created_at = NULL;
             $supplier->updated_at = NULL;
             $supplier->deleted_at = Carbon::now();
@@ -127,5 +137,32 @@ class SupplierController extends Controller
             ];   
         }
         return response()->json($response,$status); 
+    }
+
+    public function generateID()
+    {
+        $supplier = Supplier::orderBy('created_at', 'desc')->first();
+        
+        if(isset($supplier))
+            {
+                $no = substr($supplier->no_supplier,2);
+
+                if($no<9)
+                {
+                    return 'SP'.'00'.($no+1);
+                } 
+                else if($no<99)
+                {
+                    return 'SP'.'0'.($no+1);
+                }
+                else
+                {
+                    return 'SP'.($no+1);
+                }
+            }
+            else
+            {
+                return 'SP001';
+            }
     }
 }

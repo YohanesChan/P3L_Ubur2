@@ -23,7 +23,9 @@ class UkuranHwnController extends Controller
     {
         $ukuranHwn = new UkuranHewan();
         $ukuranHwn->nama_ukuran_hewan = $request['nama_ukuran_hewan'];
-        $ukuranHwn->id_pegawai_fk = 1;
+        $ukuranHwn->id_pegawai_fk = $request['id_pegawai_fk'];
+        $ukuranHwn->created_by = $request['created_by'];
+        $ukuranHwn->updated_by = $request['updated_by'];
         $ukuranHwn->created_at = Carbon::now();
         $ukuranHwn->updated_at = Carbon::now();
         try{
@@ -79,7 +81,8 @@ class UkuranHwnController extends Controller
         }
         else{
             $ukuranHwn->nama_ukuran_hewan = $request['nama_ukuran_hewan'];
-            $ukuranHwn->id_pegawai_fk = 1;
+            $ukuranHwn->created_by = $request['created_by'];
+            $ukuranHwn->updated_by = $request['updated_by'];
             $ukuranHwn->updated_at = Carbon::now();
 
             try{
@@ -102,7 +105,7 @@ class UkuranHwnController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_ukuranHwn($id_ukuran)
+    public function hapus_ukuranHwn($id_ukuran, Request $request)
     {
         $ukuranHwn = UkuranHewan::find($id_ukuran);
 
@@ -118,6 +121,9 @@ class UkuranHwnController extends Controller
             $ukuranHwn->created_at = NULL;
             $ukuranHwn->updated_at = NULL;
             $ukuranHwn->deleted_at = Carbon::now();
+            $ukuranHwn->created_by = $request['created_by'];
+            $ukuranHwn->updated_by = $request['updated_by'];
+            $ukuranHwn->deleted_by = $request['deleted_by'];
             $ukuranHwn->save();
             $status=200;
             $response = [

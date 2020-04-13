@@ -22,7 +22,9 @@ class JenisHwnController extends Controller
     {
         $jenisHwn = new JenisHewan();
         $jenisHwn->nama_jenis_hewan = $request['nama_jenis_hewan'];
-        $jenisHwn->id_pegawai_fk = 1;
+        $jenisHwn->id_pegawai_fk = $request['id_pegawai_fk'];
+        $jenisHwn->created_by = $request['created_by'];
+        $jenisHwn->updated_by = $request['updated_by'];
         $jenisHwn->created_at = Carbon::now();
         $jenisHwn->updated_at = Carbon::now();
         try{
@@ -78,7 +80,8 @@ class JenisHwnController extends Controller
         }
         else{
             $jenisHwn->nama_jenis_hewan = $request['nama_jenis_hewan'];
-            $jenisHwn->id_pegawai_fk = 1;
+            $jenisHwn->created_by = $request['created_by'];
+            $jenisHwn->updated_by = $request['updated_by'];
             $jenisHwn->updated_at = Carbon::now();
 
             try{
@@ -101,7 +104,7 @@ class JenisHwnController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_jenisHwn($id_jenis)
+    public function hapus_jenisHwn($id_jenis, Request $request)
     {
         $jenisHwn = JenisHewan::find($id_jenis);
 
@@ -114,6 +117,9 @@ class JenisHwnController extends Controller
         }
         else
         {
+            $jenisHwn->created_by = $request['created_by'];
+            $jenisHwn->updated_by = $request['updated_by'];
+            $jenisHwn->deleted_by = $request['deleted_by'];
             $jenisHwn->created_at = NULL;
             $jenisHwn->updated_at = NULL;
             $jenisHwn->deleted_at = Carbon::now();
