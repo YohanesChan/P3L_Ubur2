@@ -23,10 +23,13 @@ class CustomerController extends Controller
     {
         $customer = new customer;
         $customer->nama_customer = $request['nama_customer'];
+        $customer->no_customer = $this->generateID();
         $customer->alamat_customer = $request['alamat_customer'];
         $customer->birthday_customer = $request['birthday_customer'];
         $customer->telp_customer = $request['telp_customer'];
-        $customer->id_pegawai_fk = 1;
+        $customer->id_pegawai_fk = $request['id_pegawai_fk'];
+        $customer->created_by = $request['created_by'];
+        $customer->updated_by = $request['updated_by'];
         $customer->created_at = Carbon::now();
         $customer->updated_at = Carbon::now();
         try{
@@ -81,9 +84,11 @@ class CustomerController extends Controller
             ];
         }
         else{
+            $customer->nama_customer = $request['nama_customer'];
             $customer->alamat_customer = $request['alamat_customer'];
             $customer->telp_customer = $request['telp_customer'];
-            $customer->id_pegawai_fk = 1;
+            $customer->created_by = $request['created_by'];
+            $customer->updated_by = $request['updated_by'];
             $customer->updated_at = Carbon::now();
 
             try{
@@ -106,7 +111,7 @@ class CustomerController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_customer($id_customer)
+    public function hapus_customer($id_customer, Request $request)
     {
         $customer = customer::find($id_customer);
 
@@ -118,7 +123,10 @@ class CustomerController extends Controller
             ];
         }
         else
-        {
+        {   
+            $customer->created_by = $request['created_by'];
+            $customer->updated_by = $request['updated_by'];
+            $customer->deleted_by = $request['deleted_by'];
             $customer->created_at = NULL;
             $customer->updated_at = NULL;
             $customer->deleted_at = Carbon::now();
@@ -130,5 +138,31 @@ class CustomerController extends Controller
             ];   
         }
         return response()->json($response,$status); 
+    }
+    public function generateID()
+    {
+        $customer = Customer::orderBy('created_at', 'desc')->first();
+        
+        if(isset($customer))
+            {
+                $no = substr($customer->no_customer,2);
+
+                if($no<9)
+                {
+                    return 'CT'.'00'.($no+1);
+                } 
+                else if($no<99)
+                {
+                    return 'CT'.'0'.($no+1);
+                }
+                else
+                {
+                    return 'CT'.($no+1);
+                }
+            }
+            else
+            {
+                return 'CT001';
+            }
     }
 }
