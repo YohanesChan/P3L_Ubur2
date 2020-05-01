@@ -7,9 +7,9 @@ use App\DetilPengadaan;
 use Carbon\Carbon;
 class DetilPengadaanController extends Controller
 {
-    public function index()
+    public function index($search)
     {
-        $detilP = DetilPengadaan::all();
+        $detilP = DetilPengadaan::where('deleted_at',null)->where('id_pengadaan_fk','=',$search)->get();
         $response = [
             'status' => 'GET Berhasil',
             'result' => $detilP,
@@ -24,8 +24,10 @@ class DetilPengadaanController extends Controller
         $detilP->nama_produk = $request['nama_produk'];
         $detilP->jml_produk = $request['jml_produk'];
         $detilP->harga_produk = $request['harga_produk'];
-        $detilP->id_pengadaan_fk = 1;
-        $detilP->id_produk_fk = 1;
+        $detilP->id_pengadaan_fk = $request['id_pengadaan_fk'];
+        $detilP->id_produk_fk = $request['id_produk_fk'];
+        $detilP->created_by = $request['created_by'];
+        $detilP->updated_by = $request['updated_by'];
         $detilP->created_at = Carbon::now();
         $detilP->updated_at = Carbon::now();
         try{
@@ -80,11 +82,10 @@ class DetilPengadaanController extends Controller
             ];
         }
         else{
-            $detilP->nama_produk = $request['nama_produk'];
             $detilP->jml_produk = $request['jml_produk'];
             $detilP->harga_produk = $request['harga_produk'];
-            $detilP->id_pengadaan_fk = 1;
-            $detilP->id_produk_fk = 1;
+            $detilP->created_by = $request['created_by'];
+            $detilP->updated_by = $request['updated_by'];
             $detilP->updated_at = Carbon::now();
 
             try{
@@ -120,10 +121,7 @@ class DetilPengadaanController extends Controller
         }
         else
         {
-            $detilP->created_at = NULL;
-            $detilP->updated_at = NULL;
-            $detilP->deleted_at = Carbon::now();
-            $detilP->save();
+            $detilP->delete();
             $status=200;
             $response = [
                 'status' => 'Hapus Berhasil',
@@ -131,5 +129,10 @@ class DetilPengadaanController extends Controller
             ];   
         }
         return response()->json($response,$status); 
+    }
+
+    public function TotalPengadaan($search){
+        $detilP = DetilPengadaan::where('deleted_at',null)->where('id_pengadaan_fk','=',$search)->sum('harga_produk');
+        return $detilP;
     }
 }

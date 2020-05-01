@@ -18,7 +18,7 @@ class CreatePengadaan extends Migration
             $table->string('kode_pengadaan')->nullable();
             $table->string('status_PO')->nullable();
             $table->dateTime('tgl_pengadaan')->nullable();
-            $table->float('total_pengadaan')->nullable();
+            $table->integer('total_pengadaan')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

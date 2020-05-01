@@ -16,6 +16,7 @@ class CreateHewan extends Migration
         Schema::create('Hewans', function (Blueprint $table) {
             $table->bigIncrements('id_hewan');
             $table->string('nama_hewan')->nullable();
+            $table->string('no_hewan')->nullable();
             $table->date('birthday_hewan')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
@@ -44,3 +45,4 @@ class CreateHewan extends Migration
         Schema::dropIfExists('Hewans');
     }
 }
+

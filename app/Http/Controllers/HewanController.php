@@ -22,10 +22,13 @@ class HewanController extends Controller
     {
         $hewan = new hewan;
         $hewan->nama_hewan = $request['nama_hewan'];
+        $hewan->no_hewan = $this->generateID();
         $hewan->birthday_hewan = $request['birthday_hewan'];
-        $hewan->id_pegawai_fk = 1;
-        $hewan->id_customer_fk = 1;
-        $hewan->id_jenis_fk = 1;
+        $hewan->id_pegawai_fk = $request['id_pegawai_fk'];
+        $hewan->id_customer_fk = $request['id_customer_fk'];
+        $hewan->id_jenis_fk = $request['id_jenis_fk'];
+        $hewan->created_by = $request['created_by'];
+        $hewan->updated_by = $request['updated_by'];
         $hewan->created_at = Carbon::now();
         $hewan->updated_at = Carbon::now();
         try{
@@ -81,10 +84,8 @@ class HewanController extends Controller
         }
         else{
             $hewan->nama_hewan = $request['nama_hewan'];
-            $hewan->birthday_hewan = $request['birthday_hewan'];
-            $hewan->id_pegawai_fk = 1;///////////////////////////////////////dapetin id fk pie broo
-            $hewan->id_customer_fk = 1;///////////////////////////////////////dapetin id fk pie broo
-            $hewan->id_jenis_fk = 1;///////////////////////////////////////dapetin id fk pie broo
+            $hewan->created_by = $request['created_by'];
+            $hewan->updated_by = $request['updated_by'];
             $hewan->updated_at = Carbon::now();
 
             try{
@@ -107,7 +108,7 @@ class HewanController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_hewan($id_hewan)
+    public function hapus_hewan($id_hewan, Request $request)
     {
         $hewan = hewan::find($id_hewan);
 
@@ -120,6 +121,9 @@ class HewanController extends Controller
         }
         else
         {
+            $hewan->created_by = $request['created_by'];
+            $hewan->updated_by = $request['updated_by'];
+            $hewan->deleted_by = $request['deleted_by'];
             $hewan->created_at = NULL;
             $hewan->updated_at = NULL;
             $hewan->deleted_at = Carbon::now();
@@ -131,5 +135,31 @@ class HewanController extends Controller
             ];   
         }
         return response()->json($response,$status); 
+    }
+    public function generateID()
+    {
+        $hewan = Hewan::orderBy('created_at', 'desc')->first();
+        
+        if(isset($hewan))
+            {
+                $no = substr($hewan->no_hewan,2);
+
+                if($no<9)
+                {
+                    return 'HW'.'00'.($no+1);
+                } 
+                else if($no<99)
+                {
+                    return 'HW'.'0'.($no+1);
+                }
+                else
+                {
+                    return 'HW'.($no+1);
+                }
+            }
+            else
+            {
+                return 'HW001';
+            }
     }
 }

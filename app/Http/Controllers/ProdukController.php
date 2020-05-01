@@ -18,6 +18,17 @@ class ProdukController extends Controller
         return response()->json($response,200);
     }
 
+    public function notifikasi()
+    {
+        $produk= Produk::where('deleted_at',null)->whereRaw('stok_produk <= stok_minimal')->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $produk, 
+        ];
+
+        return response()->json($response,200);
+    }
+
     public function tambah_produk(Request $request)
     {
         $produk = new Produk();

@@ -59,6 +59,7 @@ Route::POST('hewan/update/{id_hewan}','HewanController@edit_hewan');
 Route::POST('hewan/delete/{id_hewan}','HewanController@hapus_hewan');
 
 Route::GET('produk','ProdukController@index');
+Route::GET('produk/notif','ProdukController@notifikasi');
 Route::POST('produk/create','ProdukController@tambah_produk');
 Route::GET('produk/search/{nama_produk}','ProdukController@cari_produk');
 Route::POST('produk/update/{id_produk}','ProdukController@edit_produk');
@@ -72,11 +73,13 @@ Route::POST('layanan/delete/{id_layanan}','LayananController@hapus_layanan');
 
 Route::GET('pengadaan','PengadaanController@index');
 Route::POST('pengadaan/create','PengadaanController@tambah_pengadaan');
+Route::POST('pengadaan/udt/{id_pengadaan}','PengadaanController@UpdateJmlProduk');
+Route::POST('pengadaan/ttl/{id_pengadaan}','PengadaanController@total_pengadaan');
 Route::GET('pengadaan/search/{nama_pengadaan}','PengadaanController@cari_pengadaan');
 Route::POST('pengadaan/update/{id_pengadaan}','PengadaanController@edit_pengadaan');
 Route::POST('pengadaan/delete/{id_pengadaan}','PengadaanController@hapus_pengadaan');
 
-Route::GET('detilP','DetilPengadaanController@index');
+Route::GET('detilP/{id_pengadaan_fk}','DetilPengadaanController@index');
 Route::POST('detilP/create','DetilPengadaanController@tambah_detilP');
 Route::GET('detilP/search/{nama_produk}','DetilPengadaanController@cari_detilP');
 Route::POST('detilP/update/{jml_produk}','DetilPengadaanController@edit_detilP');
