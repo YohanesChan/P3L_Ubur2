@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateTransaksi extends Migration
+class CreateTProduksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,19 @@ class CreateTransaksi extends Migration
      */
     public function up()
     {
-        Schema::create('Transaksis', function (Blueprint $table) {
-            $table->bigIncrements('id_transaksi');
-            $table->string('kode_transaksi')->nullable();
-            $table->dateTime('tgl_transaksi')->nullable();
-            $table->float('diskon_transaksi')->nullable();
-            $table->float('total_transaksi')->nullable();
-            $table->string('status_transaksi')->nullable();
+        Schema::create('t_produks', function (Blueprint $table) {
+            $table->bigIncrements('id_tproduk');
+            $table->string('kode_tproduk')->nullable();
+            $table->string('status_tproduk')->nullable();
+            $table->dateTime('tgl_tproduk')->nullable();
+            $table->integer('total_tproduk')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
             $table->dateTime('created_at')->nullable();
             $table->dateTime('updated_at')->nullable();
+            $table->dateTime('deleted_at')->nullable();
+          
 
             $table->unsignedBigInteger('id_pegawai_fk');
             $table->foreign('id_pegawai_fk')->references('id_pegawai')->on('Pegawais');
@@ -39,6 +41,6 @@ class CreateTransaksi extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Transaksis');
+        Schema::dropIfExists('t_produks');
     }
 }

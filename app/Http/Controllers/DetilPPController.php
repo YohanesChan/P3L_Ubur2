@@ -7,35 +7,35 @@ use Illuminate\Http\Request;
 
 class DetilPPController extends Controller
 {
-    public function index()
+    public function index($search)
     {
-        $detilPP = DetilPProduk::all();
+        $detilPp = DetilPProduk::where('deleted_at',null)->where('id_tproduk_fk','=',$search)->get();
         $response = [
             'status' => 'GET Berhasil',
-            'result' => $detilPP,
+            'result' => $detilPp,
         ];
 
         return response()->json($response,200);
     }
 
-    public function tambah_detilPP(Request $request)
+    public function tambah_detilPp(Request $request)
     {
-        $detilPP = new DetilPProduk();
-        $detilPP->kode_penjualan_produk = $request['kode_penjualan_produk'];
-        $detilPP->tgl_penjualan_produk = $request['tgl_penjualan_produk'];
-        $detilPP->jml_penjualan_produk = $request['jml_penjualan_produk'];
-        $detilPP->subtotal_penjualan_produk = $request['subtotal_penjualan_produk'];
-        $detilPP->id_pengadaan_fk = 1;
-        $detilPP->id_produk_fk = 1;
-        $detilPP->id_transaksi_fk = 1;
-        $detilPP->created_at = Carbon::now();
-        $detilPP->updated_at = Carbon::now();
+        $detilPp = new DetilPProduk();
+        $detilPp->nama_produk = $request['nama_produk'];
+        $detilPp->jml_produk = $request['jml_produk'];
+        $detilPp->harga_produk = $request['harga_produk'];
+        $detilPp->id_tproduk_fk = $request['id_tproduk_fk'];
+        $detilPp->id_produk_fk = $request['id_produk_fk'];
+        $detilPp->created_by = $request['created_by'];
+        $detilPp->updated_by = $request['updated_by'];
+        $detilPp->created_at = Carbon::now();
+        $detilPp->updated_at = Carbon::now();
         try{
-            $success = $detilPP->save();
+            $success = $detilPp->save();
             $status = 200;
             $response = [
                 'status' => 'Input Berhasil',
-                'result' => $detilPP
+                'result' => $detilPp
             ];
             
         }catch(\Illuminate\Database\QueryException $e){
@@ -49,10 +49,10 @@ class DetilPPController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function cari_detilPP($search)
+    public function cari_detilPp($search)
     {
-        $detilPP = DetilPProduk::where('id_penjualan_produk','like','%'.$search.'%')->get();
-        if(sizeof($detilPP)==0)
+        $detilPp = DetilPProduk::where('id_pproduk','like','%'.$search.'%')->get();
+        if(sizeof($detilPp)==0)
         {
             $status=404;
             $response = [
@@ -64,17 +64,17 @@ class DetilPPController extends Controller
             $status=200;
             $response = [
                 'status' => 'Cari Berhasil',
-                'data' => $detilPP
+                'data' => $detilPp
             ];
         }
         return response()->json($response,$status); 
     }
 
-    public function edit_detilPP(Request $request, $search)
+    public function edit_detilPp(Request $request, $search)
     {
-        $detilPP = DetilPProduk::find($search);
+        $detilPp = DetilPProduk::find($search);
 
-        if($detilPP==NULL){
+        if($detilPp==NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -82,21 +82,18 @@ class DetilPPController extends Controller
             ];
         }
         else{
-            $detilPP->kode_penjualan_produk = $request['kode_penjualan_produk'];
-            $detilPP->tgl_penjualan_produk = $request['tgl_penjualan_produk'];
-            $detilPP->jml_penjualan_produk = $request['jml_penjualan_produk'];
-            $detilPP->subtotal_penjualan_produk = $request['subtotal_penjualan_produk'];
-            $detilPP->id_pengadaan_fk = 1;
-            $detilPP->id_produk_fk = 1;
-            $detilPP->id_transaksi_fk = 1;
-            $detilPP->updated_at = Carbon::now();
+            $detilPp->jml_produk = $request['jml_produk'];
+            $detilPp->harga_produk = $request['harga_produk'];
+            $detilPp->created_by = $request['created_by'];
+            $detilPp->updated_by = $request['updated_by'];
+            $detilPp->updated_at = Carbon::now();
 
             try{
-                $success = $detilPP->save();
+                $success = $detilPp->save();
                 $status = 200;
                 $response = [
                     'status' => 'Edit Berhasil',
-                    'data' => $detilPP
+                    'data' => $detilPp
                 ];  
             }
             catch(\Illuminate\Database\QueryException $e){
@@ -111,11 +108,11 @@ class DetilPPController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_detilPP($id_penjualan_produk)
+    public function hapus_detilPp($id_pproduk)
     {
-        $detilPP = DetilPP::find($id_penjualan_produk);
+        $detilPp = DetilPProduk::find($id_pproduk);
 
-        if($detilPP==NULL || $detilPP->deleted_at != NULL){
+        if($detilPp==NULL || $detilPp->deleted_at != NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -124,16 +121,18 @@ class DetilPPController extends Controller
         }
         else
         {
-            $detilPP->created_at = NULL;
-            $detilPP->updated_at = NULL;
-            $detilPP->deleted_at = Carbon::now();
-            $detilPP->save();
+            $detilPp->delete();
             $status=200;
             $response = [
                 'status' => 'Hapus Berhasil',
-                'data' => $detilPP
+                'data' => $detilPp
             ];   
         }
         return response()->json($response,$status); 
+    }
+
+    public function TotalPengadaan($search){
+        $detilPp = DetilPProduk::where('deleted_at',null)->where('id_tproduk_fk','=',$search)->sum('harga_produk');
+        return $detilPp;
     }
 }

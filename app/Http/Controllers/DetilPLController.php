@@ -7,36 +7,36 @@ use App\DetilPLayanan;
 use Carbon\Carbon;
 class DetilPLController extends Controller
 {
-    public function index()
+    public function index($search)
     {
-        $detilPL = DetilPLayanan::all();
+        $detilPl = DetilPLayanan::where('deleted_at',null)->where('id_tlayanan_fk','=',$search)->get();
         $response = [
             'status' => 'GET Berhasil',
-            'result' => $detilPL,
+            'result' => $detilPl,
         ];
 
         return response()->json($response,200);
     }
 
-    public function tambah_detilPL(Request $request)
+    public function tambah_detilPl(Request $request)
     {
-        $detilPL = new DetilPL();
-        $detilPL->kode_penjualan_layanan = $request['kode_penjualan_layanan'];
-        $detilPL->tgl_penjualan_layanan = $request['tgl_penjualan_layanan'];
-        $detilPL->jml_penjualan_layanan = $request['jml_penjualan_layanan'];
-        $detilPL->subtotal_penjualan_layanan = $request['subtotal_penjualan_layanan'];
-        $detilPL->id_pengadaan_fk = 1;
-        $detilPL->id_produk_fk = 1;
-        $detilPL->id_transaksi_fk = 1;
-        $detilPL->id_hewan_fk = 1;
-        $detilPL->created_at = Carbon::now();
-        $detilPL->updated_at = Carbon::now();
+        $detilPl = new DetilPlayanan();
+        $detilPl->nama_layanan = $request['nama_layanan'];
+        $detilPl->jml_layanan = $request['jml_layanan'];
+        $detilPl->harga_layanan = $request['harga_layanan'];
+        $detilPl->id_tlayanan_fk = $request['id_tlayanan_fk'];
+        $detilPl->id_layanan_fk = $request['id_layanan_fk'];
+        $detilPl->id_hewan_fk = $request['id_hewan_fk'];
+        $detilPl->created_by = $request['created_by'];
+        $detilPl->updated_by = $request['updated_by'];
+        $detilPl->created_at = Carbon::now();
+        $detilPl->updated_at = Carbon::now();
         try{
-            $success = $detilPL->save();
+            $success = $detilPl->save();
             $status = 200;
             $response = [
                 'status' => 'Input Berhasil',
-                'result' => $detilPL
+                'result' => $detilPl
             ];
             
         }catch(\Illuminate\Database\QueryException $e){
@@ -50,10 +50,10 @@ class DetilPLController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function cari_detilPL($search)
+    public function cari_detilPl($search)
     {
-        $detilPL = DetilPL::where('id_penjualan_layanan','like','%'.$search.'%')->get();
-        if(sizeof($detilPL)==0)
+        $detilPl = DetilPlayanan::where('id_playanan','like','%'.$search.'%')->get();
+        if(sizeof($detilPl)==0)
         {
             $status=404;
             $response = [
@@ -65,17 +65,17 @@ class DetilPLController extends Controller
             $status=200;
             $response = [
                 'status' => 'Cari Berhasil',
-                'data' => $detilPL
+                'data' => $detilPl
             ];
         }
         return response()->json($response,$status); 
     }
 
-    public function edit_detilPL(Request $request, $search)
+    public function edit_detilPl(Request $request, $search)
     {
-        $detilPL = DetilPL::find($search);
+        $detilPl = DetilPlayanan::find($search);
 
-        if($detilPL==NULL){
+        if($detilPl==NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -83,22 +83,18 @@ class DetilPLController extends Controller
             ];
         }
         else{
-            $detilPL->kode_penjualan_layanan = $request['kode_penjualan_layanan'];
-            $detilPL->tgl_penjualan_layanan = $request['tgl_penjualan_layanan'];
-            $detilPL->jml_penjualan_layanan = $request['jml_penjualan_layanan'];
-            $detilPL->subtotal_penjualan_layanan = $request['subtotal_penjualan_layanan'];
-            $detilPL->id_pengadaan_fk = 1;
-            $detilPL->id_produk_fk = 1;
-            $detilPL->id_transaksi_fk = 1;
-            $detilPL->id_hewan_fk = 1;
-            $detilPL->updated_at = Carbon::now();
+            $detilPl->jml_layanan = $request['jml_layanan'];
+            $detilPl->harga_layanan = $request['harga_layanan'];
+            $detilPl->created_by = $request['created_by'];
+            $detilPl->updated_by = $request['updated_by'];
+            $detilPl->updated_at = Carbon::now();
 
             try{
-                $success = $detilPL->save();
+                $success = $detilPl->save();
                 $status = 200;
                 $response = [
                     'status' => 'Edit Berhasil',
-                    'data' => $detilPL
+                    'data' => $detilPl
                 ];  
             }
             catch(\Illuminate\Database\QueryException $e){
@@ -113,11 +109,11 @@ class DetilPLController extends Controller
         return response()->json($response,$status); 
     }
 
-    public function hapus_detilPL($id_penjualan_layanan)
+    public function hapus_detilPl($id_playanan)
     {
-        $detilPL = DetilPL::find($id_penjualan_layanan);
+        $detilPl = DetilPlayanan::find($id_playanan);
 
-        if($detilPL==NULL || $detilPL->deleted_at != NULL){
+        if($detilPl==NULL || $detilPl->deleted_at != NULL){
             $status=404;
             $response = [
                 'status' => 'Cari Gagal',
@@ -126,16 +122,18 @@ class DetilPLController extends Controller
         }
         else
         {
-            $detilPL->created_at = NULL;
-            $detilPL->updated_at = NULL;
-            $detilPL->deleted_at = Carbon::now();
-            $detilPL->save();
+            $detilPl->delete();
             $status=200;
             $response = [
                 'status' => 'Hapus Berhasil',
-                'data' => $detilPL
+                'data' => $detilPl
             ];   
         }
         return response()->json($response,$status); 
+    }
+
+    public function TotalPengadaan($search){
+        $detilPp = DetilPlayanan::where('deleted_at',null)->where('id_tlayanan_fk','=',$search)->sum('harga_layanan');
+        return $detilPp;
     }
 }

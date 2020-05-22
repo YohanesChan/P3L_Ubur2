@@ -21,10 +21,20 @@ class ProdukController extends Controller
     public function notifikasi()
     {
         $produk= Produk::where('deleted_at',null)->whereRaw('stok_produk <= stok_minimal')->get();
-        $response = [
-            'status' => 'GET Berhasil',
-            'result' => $produk, 
-        ];
+
+        if(sizeof($produk)==0)
+        {
+            return null;
+        }
+        else{
+            $status=200;
+            $response = [
+                'status' => 'GET Berhasil',
+                'result' => $produk, 
+            ];
+        }
+
+        
 
         return response()->json($response,200);
     }
@@ -182,6 +192,46 @@ class ProdukController extends Controller
             {
                 return 'PD001';
             }
+    }
+
+    public function sortByPriceAsc()
+    {
+        $produk= Produk::where('deleted_at',null)->orderBy('harga_produk', 'asc')->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $produk, 
+        ];
+        return response()->json($response,200);
+    }
+
+    public function sortByPriceDesc()
+    {
+        $produk= Produk::where('deleted_at',null)->orderBy('harga_produk', 'desc')->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $produk, 
+        ];
+        return response()->json($response,200);
+    }
+
+    public function sortByStockAsc()
+    {
+        $produk= Produk::where('deleted_at',null)->orderBy('stok_produk', 'asc')->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $produk, 
+        ];
+        return response()->json($response,200);
+    }
+
+    public function sortByStockDesc()
+    {
+        $produk= Produk::where('deleted_at',null)->orderBy('stok_produk', 'desc')->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $produk, 
+        ];
+        return response()->json($response,200);
     }
 
     // function upload(){

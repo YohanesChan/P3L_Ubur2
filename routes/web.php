@@ -14,10 +14,10 @@
      return view('welcome');
  })->where('any','.*');
 
-//  Route::get('storage/{filename}', function ($filename)
-//  {
-//      return Image::make(storage_path('public/images/produks' . $filename))->response();
-//  });
+ Route::get('storage/{filename}', function ($filename)
+ {
+     return Image::make(storage_path('public/images/produks' . $filename))->response();
+ });
 
 Route::GET('pegawai','PegawaiController@index');
 Route::POST('pegawai','PegawaiController@tambah_pegawai');

@@ -223,8 +223,7 @@ class PengadaanController extends Controller
                 $produk->stok_produk = $produk->stok_produk + $row->jml_produk;
                 $produk->save();
             }
-            $pengadaan->status_PO ='selesai';    
-
+            $pengadaan->status_PO ='selesai';  
             try{
                 $success = $pengadaan->save();
                 $status = 200;

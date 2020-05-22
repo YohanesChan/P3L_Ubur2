@@ -60,6 +60,10 @@ Route::POST('hewan/delete/{id_hewan}','HewanController@hapus_hewan');
 
 Route::GET('produk','ProdukController@index');
 Route::GET('produk/notif','ProdukController@notifikasi');
+Route::GET('produk/sPriceA','ProdukController@sortByPriceAsc');
+Route::GET('produk/sPriceD','ProdukController@sortByPriceDesc');
+Route::GET('produk/sStockA','ProdukController@sortByStockAsc');
+Route::GET('produk/sStockD','ProdukController@sortByStockDesc');
 Route::POST('produk/create','ProdukController@tambah_produk');
 Route::GET('produk/search/{nama_produk}','ProdukController@cari_produk');
 Route::POST('produk/update/{id_produk}','ProdukController@edit_produk');
@@ -82,17 +86,31 @@ Route::POST('pengadaan/delete/{id_pengadaan}','PengadaanController@hapus_pengada
 Route::GET('detilP/{id_pengadaan_fk}','DetilPengadaanController@index');
 Route::POST('detilP/create','DetilPengadaanController@tambah_detilP');
 Route::GET('detilP/search/{nama_produk}','DetilPengadaanController@cari_detilP');
-Route::POST('detilP/update/{jml_produk}','DetilPengadaanController@edit_detilP');
-Route::POST('detilP/delete/{harga_produk}','DetilPengadaanController@hapus_detilP');
+Route::POST('detilP/update/{id_detil_pengadaan}','DetilPengadaanController@edit_detilP');
+Route::POST('detilP/delete/{id_detil_pengadaan}','DetilPengadaanController@hapus_detilP');
 
-Route::GET('detilPP','DetilPPController@index');
-Route::POST('detilPP/create','DetilPPController@tambah_detilPP');
-Route::GET('detilPP/search/{nama_produk}','DetilPPController@cari_detilPP');
-Route::POST('detilPP/update/{jml_produk}','DetilPPController@edit_detilPP');
-Route::POST('detilPP/delete/{harga_produk}','DetilPPController@hapus_detilPP');
+Route::GET('tproduk','TProdukController@index');
+Route::POST('tproduk/create','TProdukController@tambah_tproduk');
+Route::POST('tproduk/ttl/{id_tproduk}','TProdukController@total_tproduk');
+Route::GET('tproduk/search/{nama_pengadaan}','TProdukController@cari_tproduk');
+Route::POST('tproduk/update/{id_tproduk}','TProdukController@edit_tproduk');
+Route::POST('tproduk/delete/{id_tproduk}','TProdukController@hapus_tproduk');
 
-Route::GET('detilPL','DetilPLController@index');
-Route::POST('detilPL/create','DetilLController@tambah_detilPL');
-Route::GET('detilPL/search/{nama_produk}','DetilPLController@cari_detilPL');
-Route::POST('detilPL/update/{jml_produk}','DetilPLController@edit_detilPL');
-Route::POST('detilPL/delete/{harga_produk}','DetilPLController@hapus_detilPL');
+Route::GET('detilPP/{id_pproduk_fk}','DetilPPController@index');
+Route::POST('detilPP/create','DetilPPController@tambah_detilPp');
+Route::GET('detilPP/search/{nama_produk}','DetilPPController@cari_detilPp');
+Route::POST('detilPP/update/{id_pproduk}','DetilPPController@edit_detilPp');
+Route::POST('detilPP/delete/{id_pproduk}','DetilPPController@hapus_detilPp');
+
+Route::GET('tlayanan','TLayananController@index');
+Route::POST('tlayanan/create','TLayananController@tambah_tlayanan');
+Route::POST('tlayanan/ttl/{id_tlayanan}','TLayananController@total_tlayanan');
+Route::GET('tlayanan/search/{nama_tlayanan}','TLayananController@cari_tlayanan');
+Route::POST('tlayanan/update/{id_tlayanan}','TLayananController@edit_tlayanan');
+Route::POST('tlayanan/delete/{id_tlayanan}','TLayananController@hapus_tlayanan');
+
+Route::GET('detilPL/{id_playanan_fk}','DetilPLController@index');
+Route::POST('detilPL/create','DetilPLController@tambah_detilPl');
+Route::GET('detilPL/search/{nama_layanan}','DetilPLController@cari_detilPl');
+Route::POST('detilPL/update/{id_playanan}','DetilPLController@edit_detilPl');
+Route::POST('detilPL/delete/{id_playanan}','DetilPLController@hapus_detilPl');

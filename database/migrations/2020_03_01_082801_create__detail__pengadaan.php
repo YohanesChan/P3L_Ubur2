@@ -15,7 +15,6 @@ class CreateDetailPengadaan extends Migration
     {
         Schema::create('Detil_Pengadaans', function (Blueprint $table) {
             $table->bigIncrements('id_detil_pengadaan');
-            
             $table->string('nama_produk')->nullable();
             $table->integer('jml_produk')->nullable();
             $table->integer('harga_produk')->nullable();
