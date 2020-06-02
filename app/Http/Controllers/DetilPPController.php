@@ -27,7 +27,6 @@ class DetilPPController extends Controller
         $detilPp->id_tproduk_fk = $request['id_tproduk_fk'];
         $detilPp->id_produk_fk = $request['id_produk_fk'];
         $detilPp->created_by = $request['created_by'];
-        $detilPp->updated_by = $request['updated_by'];
         $detilPp->created_at = Carbon::now();
         $detilPp->updated_at = Carbon::now();
         try{

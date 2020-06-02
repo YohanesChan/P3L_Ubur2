@@ -25,7 +25,6 @@ class UkuranHwnController extends Controller
         $ukuranHwn->nama_ukuran_hewan = $request['nama_ukuran_hewan'];
         $ukuranHwn->id_pegawai_fk = $request['id_pegawai_fk'];
         $ukuranHwn->created_by = $request['created_by'];
-        $ukuranHwn->updated_by = $request['updated_by'];
         $ukuranHwn->created_at = Carbon::now();
         $ukuranHwn->updated_at = Carbon::now();
         try{

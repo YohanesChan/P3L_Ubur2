@@ -20,9 +20,20 @@ class PengadaanController extends Controller
         return response()->json($response,200);
     }
 
+    public function getTotal($search)
+    {
+        $pengadaan = Pengadaan::select('total_pengadaan')->where('id_pengadaan',$search)->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $pengadaan,
+        ];
+
+        return response()->json($response,200);
+    }
+
     public function tambah_pengadaan(Request $request)
     {
-        $pengadaan = new pengadaan;
+        $pengadaan = new Pengadaan;
         $pengadaan->kode_pengadaan = $this->generateID();
         $pengadaan->Status_PO = $request['status_PO'];
         $pengadaan->tgl_pengadaan =  Carbon::now()->toDateString();
@@ -30,7 +41,6 @@ class PengadaanController extends Controller
         $pengadaan->id_pegawai_fk = $request['id_pegawai_fk'];
         $pengadaan->id_supplier_fk = $request['id_supplier_fk'];
         $pengadaan->created_by = $request['created_by'];
-        $pengadaan->updated_by = $request['updated_by'];
         $pengadaan->created_at = Carbon::now();
         $pengadaan->updated_at = Carbon::now();
         try{
@@ -54,7 +64,7 @@ class PengadaanController extends Controller
 
     public function cari_pengadaan($search)
     {
-        $pengadaan = pengadaan::where('kode_pengadaan','like','%'.$search.'%')->get();
+        $pengadaan = Pengadaan::where('kode_pengadaan','like','%'.$search.'%')->get();
         if(sizeof($pengadaan)==0)
         {
             $status=404;
@@ -85,7 +95,7 @@ class PengadaanController extends Controller
             ];
         }
         else{
-            $pengadaan->status_PO = $request['status_PO'];
+            $pengadaan->status_PO = 'selesai';
             $pengadaan->created_by = $request['created_by'];
             $pengadaan->updated_by = $request['updated_by'];
             $pengadaan->updated_at = Carbon::now();
@@ -142,7 +152,7 @@ class PengadaanController extends Controller
     public function generateID()
     {
         $pengadaan = Pengadaan::orderBy('created_at', 'desc')->first();
-        
+        //$date = Carbon::now()->toDateString();
         if(isset($pengadaan))
             {
                 $no = substr($pengadaan->kode_pengadaan,15);

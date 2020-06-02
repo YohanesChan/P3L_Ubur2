@@ -36,7 +36,6 @@ class TProdukController extends Controller
         $tproduk->id_pegawai_fk = $request['id_pegawai_fk'];
         $tproduk->id_customer_fk = $request['id_customer_fk'];
         $tproduk->created_by = $request['created_by'];
-        $tproduk->updated_by = $request['updated_by'];
         $tproduk->created_at = Carbon::now();
         $tproduk->updated_at = Carbon::now();
         
@@ -92,7 +91,7 @@ class TProdukController extends Controller
             ];
         }
         else{
-            $tproduk->status_tproduk = $request['status_tproduk'];
+            $tproduk->status_tproduk = 'selesai';
             $tproduk->created_by = $request['created_by'];
             $tproduk->updated_by = $request['updated_by'];
             $tproduk->updated_at = Carbon::now();
@@ -149,11 +148,10 @@ class TProdukController extends Controller
     public function generateID()
     {
         $tproduk = tproduk::orderBy('created_at', 'desc')->first();
-        
+        $date = Carbon::now()->toDateString();
         if(isset($tproduk))
             {
                 $no = substr($tproduk->kode_tproduk,15);
-                $date = Carbon::now()->toDateString();
 
                 if($no<9)
                 {

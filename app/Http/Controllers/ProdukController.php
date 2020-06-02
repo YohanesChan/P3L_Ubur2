@@ -49,7 +49,6 @@ class ProdukController extends Controller
         $produk->stok_minimal = $request['stok_minimal'];
         $produk->id_pegawai_fk = $request['id_pegawai_fk'];
         $produk->created_by = $request['created_by'];
-        $produk->updated_by = $request['updated_by'];
         $produk->created_at = Carbon::now();
         $produk->updated_at = Carbon::now();
 

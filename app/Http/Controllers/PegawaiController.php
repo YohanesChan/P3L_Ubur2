@@ -37,7 +37,6 @@ class PegawaiController extends Controller
         $pegawai->username_pegawai = $request['username_pegawai'];
         $pegawai->password_pegawai = Hash::make($request->password_pegawai);
         $pegawai->created_by = $request['created_by'];
-        $pegawai->updated_by = $request['updated_by'];
         $pegawai->created_at = Carbon::now();
         $pegawai->updated_at = Carbon::now();
         try{

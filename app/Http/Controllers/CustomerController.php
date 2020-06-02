@@ -29,7 +29,6 @@ class CustomerController extends Controller
         $customer->telp_customer = $request['telp_customer'];
         $customer->id_pegawai_fk = $request['id_pegawai_fk'];
         $customer->created_by = $request['created_by'];
-        $customer->updated_by = $request['updated_by'];
         $customer->created_at = Carbon::now();
         $customer->updated_at = Carbon::now();
         try{

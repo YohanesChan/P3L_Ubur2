@@ -6,12 +6,37 @@ use App\DetilPLayanan;
 use App\TLayanan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Channels\NexmoSmsChannel;
+use Illuminate\Notifications\Messages\NexmoMessage;
+use Nexmo\Client\Fascade\Nexmo;
 
 class TLayananController extends Controller
 {
     public function index()
     {
         $tlayanan = TLayanan::where('deleted_at',null)->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $tlayanan,
+        ];
+
+        return response()->json($response,200);
+    }
+
+    public function index_onproccess()
+    {
+        $tlayanan = TLayanan::where('deleted_at',null)->where('status_tlayanan','proses')->get();
+        $response = [
+            'status' => 'GET Berhasil',
+            'result' => $tlayanan,
+        ];
+
+        return response()->json($response,200);
+    }
+
+    public function index_onfinish()
+    {
+        $tlayanan = TLayanan::where('deleted_at',null)->where('status_tlayanan','selesai')->get();
         $response = [
             'status' => 'GET Berhasil',
             'result' => $tlayanan,
@@ -30,7 +55,6 @@ class TLayananController extends Controller
         $tlayanan->id_pegawai_fk = $request['id_pegawai_fk'];
         $tlayanan->id_customer_fk = $request['id_customer_fk'];
         $tlayanan->created_by = $request['created_by'];
-        $tlayanan->updated_by = $request['updated_by'];
         $tlayanan->created_at = Carbon::now();
         $tlayanan->updated_at = Carbon::now();
         
@@ -86,10 +110,11 @@ class TLayananController extends Controller
             ];
         }
         else{
-            $tlayanan->status_tlayanan = $request['status_tlayanan'];
+            $tlayanan->status_tlayanan = 'selesai';
             $tlayanan->created_by = $request['created_by'];
             $tlayanan->updated_by = $request['updated_by'];
             $tlayanan->updated_at = Carbon::now();
+            $this->sms();
 
             try{
                 $success = $tlayanan->save();
@@ -208,5 +233,16 @@ class TLayananController extends Controller
             }
         }
         return response()->json($response,$status); 
+    }
+
+    public function sms(){
+        $basic  = new \Nexmo\Client\Credentials\Basic('198caecb', 'gR3JQ1VvppAzhYty');
+        $client = new \Nexmo\Client($basic);
+
+        $message = $client->message()->send([
+            'to' => '6288225441886',
+            'from' => 'KouveePet',
+            'text' => 'Layanan Anda telah selesai'
+        ]);
     }
 }

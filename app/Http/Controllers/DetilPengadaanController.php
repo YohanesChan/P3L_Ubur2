@@ -27,7 +27,6 @@ class DetilPengadaanController extends Controller
         $detilP->id_pengadaan_fk = $request['id_pengadaan_fk'];
         $detilP->id_produk_fk = $request['id_produk_fk'];
         $detilP->created_by = $request['created_by'];
-        $detilP->updated_by = $request['updated_by'];
         $detilP->created_at = Carbon::now();
         $detilP->updated_at = Carbon::now();
         try{

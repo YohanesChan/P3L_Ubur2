@@ -17,8 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-
+Route::POST('sms','TLayananController@sms');
 Route::POST('pegawai/login','PegawaiController@login');
 
 Route::GET('pegawai','PegawaiController@index');
@@ -79,6 +78,7 @@ Route::GET('pengadaan','PengadaanController@index');
 Route::POST('pengadaan/create','PengadaanController@tambah_pengadaan');
 Route::POST('pengadaan/udt/{id_pengadaan}','PengadaanController@UpdateJmlProduk');
 Route::POST('pengadaan/ttl/{id_pengadaan}','PengadaanController@total_pengadaan');
+Route::GET('pengadaan/total/{id_pengadaan}','PengadaanController@getTotal');
 Route::GET('pengadaan/search/{nama_pengadaan}','PengadaanController@cari_pengadaan');
 Route::POST('pengadaan/update/{id_pengadaan}','PengadaanController@edit_pengadaan');
 Route::POST('pengadaan/delete/{id_pengadaan}','PengadaanController@hapus_pengadaan');
@@ -96,13 +96,15 @@ Route::GET('tproduk/search/{nama_pengadaan}','TProdukController@cari_tproduk');
 Route::POST('tproduk/update/{id_tproduk}','TProdukController@edit_tproduk');
 Route::POST('tproduk/delete/{id_tproduk}','TProdukController@hapus_tproduk');
 
-Route::GET('detilPP/{id_pproduk_fk}','DetilPPController@index');
+Route::GET('detilPP/{id_tproduk_fk}','DetilPPController@index');
 Route::POST('detilPP/create','DetilPPController@tambah_detilPp');
 Route::GET('detilPP/search/{nama_produk}','DetilPPController@cari_detilPp');
 Route::POST('detilPP/update/{id_pproduk}','DetilPPController@edit_detilPp');
 Route::POST('detilPP/delete/{id_pproduk}','DetilPPController@hapus_detilPp');
 
 Route::GET('tlayanan','TLayananController@index');
+Route::GET('tlayanan/finish','TLayananController@index_onfinish');
+Route::GET('tlayanan/proccess','TLayananController@index_onproccess');
 Route::POST('tlayanan/create','TLayananController@tambah_tlayanan');
 Route::POST('tlayanan/ttl/{id_tlayanan}','TLayananController@total_tlayanan');
 Route::GET('tlayanan/search/{nama_tlayanan}','TLayananController@cari_tlayanan');

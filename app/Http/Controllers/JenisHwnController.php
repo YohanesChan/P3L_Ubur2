@@ -24,7 +24,6 @@ class JenisHwnController extends Controller
         $jenisHwn->nama_jenis_hewan = $request['nama_jenis_hewan'];
         $jenisHwn->id_pegawai_fk = $request['id_pegawai_fk'];
         $jenisHwn->created_by = $request['created_by'];
-        $jenisHwn->updated_by = $request['updated_by'];
         $jenisHwn->created_at = Carbon::now();
         $jenisHwn->updated_at = Carbon::now();
         try{

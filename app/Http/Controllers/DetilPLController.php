@@ -28,7 +28,6 @@ class DetilPLController extends Controller
         $detilPl->id_layanan_fk = $request['id_layanan_fk'];
         $detilPl->id_hewan_fk = $request['id_hewan_fk'];
         $detilPl->created_by = $request['created_by'];
-        $detilPl->updated_by = $request['updated_by'];
         $detilPl->created_at = Carbon::now();
         $detilPl->updated_at = Carbon::now();
         try{

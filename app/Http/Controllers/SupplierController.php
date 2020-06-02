@@ -27,7 +27,6 @@ class SupplierController extends Controller
         $supplier->id_pegawai_fk = $request['id_pegawai_fk'];
         $supplier->telp_supplier = $request['telp_supplier'];
         $supplier->created_by = $request['created_by'];
-        $supplier->updated_by = $request['updated_by'];
 
         $supplier->created_at = Carbon::now();
         $supplier->updated_at = Carbon::now();

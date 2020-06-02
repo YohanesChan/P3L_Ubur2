@@ -28,7 +28,6 @@ class LayananController extends Controller
         $layanan->id_pegawai_fk = $request['id_pegawai_fk'];
         $layanan->id_ukuran_fk = $request['id_ukuran_fk'];
         $layanan->created_by = $request['created_by'];
-        $layanan->updated_by = $request['updated_by'];
         $layanan->created_at = Carbon::now();
         $layanan->updated_at = Carbon::now();
         try{

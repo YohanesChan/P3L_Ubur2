@@ -28,7 +28,6 @@ class HewanController extends Controller
         $hewan->id_customer_fk = $request['id_customer_fk'];
         $hewan->id_jenis_fk = $request['id_jenis_fk'];
         $hewan->created_by = $request['created_by'];
-        $hewan->updated_by = $request['updated_by'];
         $hewan->created_at = Carbon::now();
         $hewan->updated_at = Carbon::now();
         try{
